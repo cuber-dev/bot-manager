@@ -47,7 +47,8 @@ maxBot.on('message', async (msg) => {
     console.log(msg.text)
     // Check if userCommand starts with certain strings
     if (userCommand.startsWith('/start') || userCommand.startsWith('start')) {
-        text = `Introducing Maxpark, the innovative bot designed by cuber-dev! ...`;
+        text = `Introducing Maxpark, the innovative bot designed by cuber-dev! Maxpark is your ultimate YouTube companion, adept at effortlessly downloading both videos and audio content. With its seamless integration, you can now enjoy your favorite media offline, thanks to Maxpark's exceptional capabilities. Say goodbye to buffering and hello to convenience, as Maxpark simplifies your entertainment experience. i can help you with downloading youtube videos and audios and i am also able to genearte random texts , images. i am still in development , if you have any questions or suggestions ,please feel free to contact my author at github , telegram : ID : cuber-dev. i hope you enjoy using me. thanks for using me. /help for help`
+        
         sendMsg(maxBot, chatId, text);
     } else if (userCommand.startsWith('/help') || userCommand.startsWith('help')) {
         const availableCommands = [
