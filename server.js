@@ -71,9 +71,7 @@ maxBot.on('message', async (msg) => {
     } else if (userCommand.startsWith('/download_yt')) {
         await downloadYtVideo(userCommand, userMessage, chatId);
     }
-});
 
-maxBot.on('message', async (msg) => {
     if (msg.new_chat_members) {
         const chatId = msg.chat.id;
         const newMembers = msg.new_chat_members;
@@ -81,11 +79,12 @@ maxBot.on('message', async (msg) => {
         // Send a greeting message to each new member
         for (const newMember of newMembers) {
             const userName = newMember.username || newMember.first_name || 'New Member';
-            const greeting = `Welcome to the group, ${userName}! Feel free to introduce yourself and use me for downloading things like videos and audios and images.`;
+            const greeting = `Welcome to the group, ${userName}! Feel free to introduce yourself and use me for downloading things like videos and audios and images.\n /help for help`;
             sendMsg(maxBot, chatId, greeting);
         }
     }
 });
+
 
 async function downloadYtVideo(userCommand,userMessage,chatId){
     const URI = `https://yt-vd-bot.onrender.com/download`
