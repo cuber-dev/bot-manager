@@ -44,7 +44,7 @@ maxBot.on('message', async (msg) => {
     const { chatId, userCommand, userMessage } = extractReq(msg);
 
     let text = '';
-    
+    console.log(msg.text)
     // Check if userCommand starts with certain strings
     if (userCommand.startsWith('/start') || userCommand.startsWith('start')) {
         text = `Introducing Maxpark, the innovative bot designed by cuber-dev! ...`;
