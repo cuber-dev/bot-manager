@@ -5,7 +5,11 @@ const port = process.env.PORT || 5000;
 
 const { maxToken , verifyYtUrl } = require('./bots/max');
 
-
+app.get('/', (req, res) => {
+    const botResponse = "This is the bot manger max response.";
+    const response = { response: botResponse };
+    res.json(response);
+});
 function generateRandomText() {
   const texts = [
     'Hello, world!',
