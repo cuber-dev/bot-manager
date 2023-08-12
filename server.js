@@ -4,7 +4,8 @@ const {
     generateRandomText,
     randomImage,
     downloadYtVideo,
-    getProfilePic
+    getProfilePic,
+    labels,
 } = require('./utils/utils')
 const app = express();
 const port = process.env.PORT || 5000;
@@ -49,6 +50,8 @@ maxBot.on('message', async (msg) => {
         '/random_text - Generate random text',
         '/random_image - Generate random image',
         '/random_image <width> <height> - Generate random image with width and height',
+        '/pic_help',
+        '/pic <username> <label> - generates a profile pic with username and a label(enter /pic_help for availabel labels) ',
         '/download_yt_audio <url> - Download audio from youtube',
         '/download_yt_video <url> - Download video from youtube',
         'if you cant recieve my messages : please wake me up here -> https://bot-manager-r4kp.onrender.com/'
@@ -78,6 +81,11 @@ maxBot.on('message', async (msg) => {
         },100)
     } else if (userCommand.startsWith('/download_yt')) {
         await downloadYtVideo(maxBot,userCommand, userMessage, chatId, senderMention);
+    }else if (userCommand.startsWith('/pic_help')) {
+        const labelsText = `${senderMention} Available labels:\n${labels.join('\n')} , now enter the command /pic <yourname> <label>`;
+        sendMsg(maxBot, chatId, labelsText)
+    } else if (userCommand.startsWith('/pic')) {
+        await handlePic(msg,chatId,senderMention)
     }
 
     if (msg.new_chat_members) {
@@ -95,7 +103,25 @@ maxBot.on('message', async (msg) => {
     }
 });
 
-
+async function handlePic(msg,chatId,senderMention){
+    const url = await getProfilePic(msg.text);
+        let response = ''
+        if(url === 'label_mismatch'){
+            return sendMsg(maxBot, chatId, `${senderMention} please enter the available labels only... `)
+        }
+        if(!url){
+            return sendMsg(maxBot, chatId, `${senderMention} please enter the username and label correctly `)
+        }
+        sendMsg(maxBot, chatId, `${senderMention} Please wait, generating profile pic with label ${msg.text.split(/\s+/g)[2]} ...`);
+        setTimeout(async () => {
+            response = await maxBot.sendPhoto(chatId, url);
+            if (response) {
+                sendMsg(maxBot, chatId,`${senderMention} you profile pic is ready , please check it :)`);
+            } else {
+                sendMsg(maxBot, chatId, `${senderMention} There was an issue generating the profile pic :(`);
+            }
+        },100)
+}
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

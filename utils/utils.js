@@ -1,4 +1,4 @@
-let formatLabels  = [
+let labels  = [
     "Identicon",
     "Botts",
     "Pixel-art",
@@ -20,7 +20,7 @@ let formatLabels  = [
     'Lorelei-neutral',
     'Shapes'
     ];
-let formatPaths = [
+let paths = [
     '5.x/identicon',
     '5.x/bottts',
     '4.x/pixel-art',
@@ -44,20 +44,30 @@ let formatPaths = [
   ];
 
 let formatType = 'jpg';
-let newPath = 0,newLabel = 0
-async function getProfilePic(username,imgType,labelType,pathType){
-    formatType = imgType || formatType;
-    formatPaths.forEach((path,i) => {
-        if(path.includes(pathType)){
-            newPath = i;
-        }
-        if(formatLabels[i].includes(labelType)){
-            newLabel = i;
-        }
-    })
-    const url =  `https://api.dicebear.com/${formatPaths[i]}/${formatType}?seed=${username}`;
+
+async function getProfilePicUrl(userName,newPath){
+    const url =  `https://api.dicebear.com/${paths[newPath]}/${formatType}?seed=${userName}`;
     return url     
-  }
+}
+async function getProfilePic(msg){
+    let newPath = labels.length + 1
+
+    const userName = msg.split(/\s+/g)[1].replace('@','');
+    const pathType = msg.split(/\s+/g)[2];
+    if(userName && pathType){
+        paths.forEach((path,i) => { 
+            if(path.toLocaleLowerCase().includes(pathType.toLowerCase().trim())){
+                newPath = i;
+            }
+        })
+        if(!labels[newPath] in labels){
+            return 'label_mismatch'
+        }
+        const url = await getProfilePicUrl(userName,newPath);
+        return url
+    }
+    return null
+  } 
 
 
 
@@ -141,5 +151,6 @@ module.exports = {
     randomImage,
     downloadYtVideo,
     getProfilePic,
-    generateRandomText
+    generateRandomText,
+    labels,
 }
