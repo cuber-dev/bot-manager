@@ -50,7 +50,7 @@ maxBot.on('message', async (msg) => {
         '/random_text - Generate random text',
         '/random_image - Generate random image',
         '/random_image <width> <height> - Generate random image with width and height',
-        '/pic_help',
+        '/pic_labels - show available labels',
         '/pic <username> <label> - generates a profile pic with username and a label(enter /pic_help for availabel labels) ',
         '/download_yt_audio <url> - Download audio from youtube',
         '/download_yt_video <url> - Download video from youtube',
@@ -81,7 +81,7 @@ maxBot.on('message', async (msg) => {
         },100)
     } else if (userCommand.startsWith('/download_yt')) {
         await downloadYtVideo(maxBot,userCommand, userMessage, chatId, senderMention);
-    }else if (userCommand.startsWith('/pic_help')) {
+    }else if (userCommand.startsWith('/pic_labels')) {
         const labelsText = `${senderMention} Available labels:\n${labels.join('\n')} , now enter the command /pic <yourname> <label>`;
         sendMsg(maxBot, chatId, labelsText)
     } else if (userCommand.startsWith('/pic')) {
@@ -104,23 +104,33 @@ maxBot.on('message', async (msg) => {
 });
 
 async function handlePic(msg,chatId,senderMention){
-    const url = await getProfilePic(msg.text);
+    if(!msg.text.split(/\s+/g)[1]){
+        return sendMsg(maxBot, chatId, `${senderMention} please enter the name and label `)
+    }
+    if(!msg.text.split(/\s+/g)[2]){
+        return sendMsg(maxBot, chatId, `${senderMention} please enter the label `)
+    }
+    
+    const userName = msg.text.split(/\s+/g)[1];
+    const pathType = msg.text.split(/\s+/g)[2];
+    
+    const url = await getProfilePic(userName,pathType);
         let response = ''
+        console.log(url)
         if(url === 'label_mismatch'){
             return sendMsg(maxBot, chatId, `${senderMention} please enter the available labels only... `)
         }
-        if(!url){
-            return sendMsg(maxBot, chatId, `${senderMention} please enter the username and label correctly `)
+        if(url && url !== 'label_mismatch'){
+            sendMsg(maxBot, chatId, `${senderMention} Please wait, generating profile pic with label ${msg.text.split(/\s+/g)[2]} ...`);
+            setTimeout(async () => {
+                response = await maxBot.sendPhoto(chatId, url);
+                if (response) {
+                    sendMsg(maxBot, chatId,`${senderMention} you profile pic is ready , please check it :)`);
+                } else {
+                    sendMsg(maxBot, chatId, `${senderMention} There was an issue generating the profile pic :(`);
+                }
+            },100)
         }
-        sendMsg(maxBot, chatId, `${senderMention} Please wait, generating profile pic with label ${msg.text.split(/\s+/g)[2]} ...`);
-        setTimeout(async () => {
-            response = await maxBot.sendPhoto(chatId, url);
-            if (response) {
-                sendMsg(maxBot, chatId,`${senderMention} you profile pic is ready , please check it :)`);
-            } else {
-                sendMsg(maxBot, chatId, `${senderMention} There was an issue generating the profile pic :(`);
-            }
-        },100)
 }
 
 app.listen(port, () => {

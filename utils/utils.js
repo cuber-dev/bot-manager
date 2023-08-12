@@ -49,23 +49,23 @@ async function getProfilePicUrl(userName,newPath){
     const url =  `https://api.dicebear.com/${paths[newPath]}/${formatType}?seed=${userName}`;
     return url     
 }
-async function getProfilePic(msg){
-    let newPath = labels.length + 1
+async function getProfilePic(userName,labelType){
+    let newPath = labels.length + 2 
 
-    const userName = msg.split(/\s+/g)[1].replace('@','');
-    const pathType = msg.split(/\s+/g)[2];
-    if(userName && pathType){
-        paths.forEach((path,i) => { 
-            if(path.toLocaleLowerCase().includes(pathType.toLowerCase().trim())){
-                newPath = i;
+
+    if(userName && labelType){
+        labels.forEach((label,i) => { 
+            if(label.toLowerCase() === labelType.toLowerCase().trim()){
+                newPath = i; 
             }
         })
-        if(!labels[newPath] in labels){
+        if(labels.includes(labels[newPath])){
+            const url = await getProfilePicUrl(userName,newPath);
+            return url 
+        }else {
             return 'label_mismatch'
         }
-        const url = await getProfilePicUrl(userName,newPath);
-        return url
-    }
+    } 
     return null
   } 
 
