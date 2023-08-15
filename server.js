@@ -59,7 +59,7 @@ maxBot.on('message', async (msg) => {
     console.log(msg.text)
     // If the message is from a group chat, construct the mention
     if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
-        const senderFirstName = msg.from.username;
+        const senderFirstName = msg.from.username || msg.name || "unknown_user";
 
         senderMention = `@${senderFirstName}`;
     }  
