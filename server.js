@@ -59,9 +59,9 @@ maxBot.on('message', async (msg) => {
     console.log(msg.text)
     // If the message is from a group chat, construct the mention
     if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
-        const senderFirstName = msg.from.username || msg.name || "unknown_user";
+        const senderFirstName = msg.from.username || msg.from.name || msg.name || null;
 
-        senderMention = `@${senderFirstName}`;
+        senderMention = senderFirstName === null ? 'unknown_user' : `@${senderFirstName}`;
     }  
     // Check if userCommand starts with certain strings
     if (userCommand.startsWith('/start') || userCommand.startsWith('start')) {
