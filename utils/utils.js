@@ -114,7 +114,8 @@ async function downloadYtVideo(bot,userCommand,userMessage,chatId ,senderMention
                     }
                 }
                  catch (error) {
-                   console.log(error) bot.sendMessage(chatId,`${senderMention} Error downloading audio (500)`);
+                   console.log(error)
+ bot.sendMessage(chatId,`${senderMention} Error downloading audio (500)`);
                 }
             } else if (userCommand.startsWith('/download_yt_video')) {
                 try {
@@ -127,7 +128,8 @@ async function downloadYtVideo(bot,userCommand,userMessage,chatId ,senderMention
                         bot.sendMessage(chatId, `${senderMention} There was an issue downloading the video.`);
                     }
                 } catch (error) {
-                   console.log(error) bot.sendMessage(chatId,`${senderMention} Error downloading video (500)`);
+                   console.log(error)
+ bot.sendMessage(chatId,`${senderMention} Error downloading video (500)`);
                 }
             }
 }
