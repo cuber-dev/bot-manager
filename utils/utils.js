@@ -87,7 +87,7 @@ async function getProfilePic(userName,labelType){
 const { verifyYtUrl } = require('../bots/max');
 
 async function downloadYtVideo(bot,userCommand,userMessage,chatId ,senderMention){
-    const URI = `https://yt-vd-bot.onrender.com/download`
+    const URI = `http://yt-vd-downloader.nandhuadepu.repl.co/download`
         
         if(!userMessage){
             bot.sendMessage(chatId, `${senderMention} Please enter a youtube video url ,
